@@ -41,12 +41,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
-            .cors().and()
             .authorizeHttpRequests()
             .requestMatchers("/api/users/**").permitAll()
             .requestMatchers("/api/timesheet-entries/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/error").permitAll()
             .anyRequest().authenticated()
             .and()
             .authenticationProvider(authenticationProvider())
