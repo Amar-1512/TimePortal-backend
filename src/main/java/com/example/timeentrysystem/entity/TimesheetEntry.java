@@ -31,6 +31,8 @@ public class TimesheetEntry {
     private int sat;
     private int sun;
 
+    private String projectName;
+
     @Column(length = 1000)
     private String comments;
 
@@ -154,5 +156,13 @@ public class TimesheetEntry {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }
