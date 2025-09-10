@@ -46,5 +46,23 @@ public class UserController {
             return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateUserStatus(@PathVariable Long id, @RequestBody String status) {
+        logger.info("Received request to update user status: userId={}, status={}", id, status);
+        try {
+            boolean success = userService.updateUserStatus(id, status);
+            if (success) {
+                logger.info("User status updated successfully: userId={}", id);
+                return new ResponseEntity<>("User status updated successfully", HttpStatus.OK);
+            } else {
+                logger.warn("User not found: userId={}", id);
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            logger.error("Internal server error while updating user status", e);
+            return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
  
