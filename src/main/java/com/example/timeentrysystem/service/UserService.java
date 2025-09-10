@@ -72,4 +72,15 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
         return true;
     }
+
+    public boolean updateUserStatus(Long userId, String status) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return false;
+        }
+        User user = userOpt.get();
+        user.setStatus(status);
+        userRepository.save(user);
+        return true;
+    }
 }
