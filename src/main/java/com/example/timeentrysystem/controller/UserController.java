@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Map;
  
 @RestController
 @RequestMapping("/api/users")
@@ -48,7 +49,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateUserStatus(@PathVariable Long id, @RequestBody String status) {
+    public ResponseEntity<?> updateUserStatus(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String status = request.get("status");
         logger.info("Received request to update user status: userId={}, status={}", id, status);
         try {
             boolean success = userService.updateUserStatus(id, status);
