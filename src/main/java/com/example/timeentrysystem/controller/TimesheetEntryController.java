@@ -25,6 +25,19 @@ public class TimesheetEntryController {
         }
     }
 
+    @GetMapping("/byWeek")
+    public ResponseEntity<List<TimesheetEntry>> getEntriesByEmployeeNameAndWeekStart(
+            @RequestParam String employeeName,
+            @RequestParam String weekStart) {
+        try {
+            java.time.LocalDate weekStartDate = java.time.LocalDate.parse(weekStart);
+            List<TimesheetEntry> entries = service.getEntriesByEmployeeNameAndWeekStart(employeeName, weekStartDate);
+            return ResponseEntity.ok(entries);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TimesheetEntry> getEntryById(@PathVariable Long id) {
         return service.getEntryById(id)
@@ -68,12 +81,13 @@ public class TimesheetEntryController {
 
     @PutMapping("/{id}/status")
     public ResponseEntity<TimesheetEntry> updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
-        TimesheetEntry updated = service.updateStatus(id, request.getStatus());
+        TimesheetEntry updated = service.updateStatus(id, request.getStatus(), request.getComments());
         return (updated != null) ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     public static class StatusUpdateRequest {
         private String status;
+        private String comments;
 
         public String getStatus() {
             return status;
@@ -81,6 +95,14 @@ public class TimesheetEntryController {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public String getComments() {
+            return comments;
+        }
+
+        public void setComments(String comments) {
+            this.comments = comments;
         }
     }
 
