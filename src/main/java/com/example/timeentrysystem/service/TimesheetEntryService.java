@@ -22,19 +22,23 @@ public class TimesheetEntryService {
         return repository.findByEmployeeName(employeeName);
     }
 
+    public List<TimesheetEntry> getEntriesByEmployeeNameAndWeekStart(String employeeName, java.time.LocalDate weekStart) {
+        return repository.findByEmployeeNameAndWeekStart(employeeName, weekStart);
+    }
+
     // Removed getEntriesByEmployeeId method as employeeId does not exist in entity
 
     public Optional<TimesheetEntry> getEntryById(Long id) {
         return repository.findById(id);
     }
 
-    public boolean existsByEmployeeNameAndWeekStart(String employeeName, java.time.LocalDate weekStart) {
-        return !repository.findByEmployeeNameAndWeekStart(employeeName, weekStart).isEmpty();
+    public boolean existsByEmployeeNameAndWeekStartAndType(String employeeName, java.time.LocalDate weekStart, String type) {
+        return !repository.findByEmployeeNameAndWeekStartAndType(employeeName, weekStart, type).isEmpty();
     }
 
     public TimesheetEntry createEntry(TimesheetEntry entry) {
-        if (existsByEmployeeNameAndWeekStart(entry.getEmployeeName(), entry.getWeekStart())) {
-            throw new IllegalArgumentException("You already entered the data for this week");
+        if (existsByEmployeeNameAndWeekStartAndType(entry.getEmployeeName(), entry.getWeekStart(), entry.getType())) {
+            throw new IllegalArgumentException("You already entered the data for this type this week");
         }
         return repository.save(entry);
     }
@@ -55,7 +59,9 @@ public class TimesheetEntryService {
                     entry.setFri(updatedEntry.getFri());
                     entry.setSat(updatedEntry.getSat());
                     entry.setSun(updatedEntry.getSun());
+                    entry.setType(updatedEntry.getType());
                     entry.setComments(updatedEntry.getComments());
+                    entry.setAdminComments(updatedEntry.getAdminComments());
                     return repository.save(entry);
                 })
                 .orElse(null);
@@ -83,10 +89,11 @@ public class TimesheetEntryService {
         repository.deleteById(id);
     }
 
-    public TimesheetEntry updateStatus(Long id, String status) {
+    public TimesheetEntry updateStatus(Long id, String status, String adminComments) {
         return repository.findById(id)
                 .map(entry -> {
                     entry.setStatus(status);
+                    entry.setAdminComments(adminComments);
                     return repository.save(entry);
                 })
                 .orElse(null);
