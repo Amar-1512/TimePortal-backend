@@ -14,5 +14,7 @@ public interface TimesheetRepository extends JpaRepository<TimesheetEntry, Long>
 
     List<TimesheetEntry> findByEmployeeNameAndWeekStart(String employeeName, LocalDate weekStart);
 
+    List<TimesheetEntry> findByEmployeeNameAndWeekStartAndType(String employeeName, LocalDate weekStart, String type);
+
     // Removed findByEmployeeId method as employeeId does not exist in entity
 }
