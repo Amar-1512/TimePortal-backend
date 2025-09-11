@@ -31,10 +31,15 @@ public class TimesheetEntry {
     private int sat;
     private int sun;
 
+    private String type; // e.g., 'project', 'leave', 'holiday', 'sick'
+
     private String projectName;
 
     @Column(length = 1000)
     private String comments;
+
+    @Column(length = 1000)
+    private String adminComments;
 
     // Getters and Setters
 
@@ -158,11 +163,27 @@ public class TimesheetEntry {
         this.comments = comments;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getProjectName() {
         return projectName;
     }
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public String getAdminComments() {
+        return adminComments;
+    }
+
+    public void setAdminComments(String adminComments) {
+        this.adminComments = adminComments;
     }
 }
